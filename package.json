@@ -9,7 +9,6 @@
     "dev": "next dev --turbopack --port 27754",
     "build": "npx next build",
     "start": "next start --port 27754",
-    "postinstall": "patch-package",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"
   },
