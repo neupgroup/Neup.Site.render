@@ -83,9 +83,28 @@ export type RendererPageContent = {
 };
 
 const dataRoot = path.join(process.cwd(), "data");
+const rendererEngineRedirectUrl = "https://neupgroup.com/site";
 
 function getDomainDataDirectory(domain: string) {
   return path.join(dataRoot, domain);
+}
+
+function normalizeHost(host: string) {
+  return host.toLowerCase().split(":")[0] ?? "";
+}
+
+export function shouldRenderSiteForHost(host: string, domain: string) {
+  const normalizedHost = normalizeHost(host);
+  const normalizedDomain = normalizeHost(domain);
+
+  return (
+    normalizedHost === normalizedDomain ||
+    normalizedHost === `www.${normalizedDomain}`
+  );
+}
+
+export function getRendererEngineRedirectUrl() {
+  return rendererEngineRedirectUrl;
 }
 
 async function readJsonFile(filePath: string) {
