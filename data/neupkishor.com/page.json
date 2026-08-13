@@ -1,0 +1,60 @@
+{
+  "hero": {
+    "eyebrow": "Developer for Product-Led Teams",
+    "heading": "I turn rough product ideas into fast, usable, maintainable web systems.",
+    "summary": "I help founders and teams ship modern applications, dashboards, internal tools, and automation without turning the codebase into a liability.",
+    "availability": "Available for select builds and technical partnerships"
+  },
+  "cta": {
+    "buttonTitle": "Discuss a Build",
+    "buttonLink": "mailto:hello@neupkishor.com"
+  },
+  "secondaryCta": {
+    "buttonTitle": "See the Offer",
+    "buttonLink": "#offer"
+  },
+  "highlights": [
+    "Product engineering from blank page to deployed feature",
+    "Backend systems that stay readable under pressure",
+    "Dashboards, workflows, and automation for daily operations",
+    "Fast interfaces that feel intentional, not template-driven"
+  ],
+  "stats": [
+    {
+      "label": "Core Stack",
+      "value": "Next.js + TypeScript"
+    },
+    {
+      "label": "Best Fit",
+      "value": "0-1 Products"
+    },
+    {
+      "label": "Working Style",
+      "value": "Senior, direct, async"
+    }
+  ],
+  "services": [
+    {
+      "title": "Product Builds",
+      "description": "Landing pages, SaaS flows, customer portals, admin tools, and MVPs designed around actual user behavior."
+    },
+    {
+      "title": "System Architecture",
+      "description": "Clean service boundaries, typed data flows, durable APIs, and code structure that keeps future changes cheap."
+    },
+    {
+      "title": "Workflow Automation",
+      "description": "Internal tools, reporting surfaces, integrations, and operational glue that remove repetitive team work."
+    }
+  ],
+  "proof": [
+    "I optimize for shipping useful software, not adding framework ceremony.",
+    "I keep product logic explicit, typed, and reusable across the app.",
+    "I communicate tradeoffs early so teams can make decisions without guessing."
+  ],
+  "process": [
+    "Clarify the business outcome and technical constraints.",
+    "Design the smallest architecture that can survive the next stage.",
+    "Ship in visible slices with clean handoff notes and maintainable code."
+  ]
+}

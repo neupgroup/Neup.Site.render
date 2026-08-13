@@ -1,3 +1,8 @@
-[
-    ""
-]
+{
+  "domain": "neupkishor.com",
+  "name": "Neup Kishor",
+  "title": "Neup Kishor - Developer for Product-Led Teams",
+  "description": "Personal brand landing page for Neup Kishor, a developer building sharp web products, internal systems, and automation for ambitious teams.",
+  "locale": "en",
+  "favicon": "favicon.ico"
+}

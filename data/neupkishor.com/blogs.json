@@ -1,0 +1,71 @@
+[
+  {
+    "slug": "building-products-with-less-ceremony",
+    "title": "Building Products With Less Ceremony",
+    "description": "A practical note on choosing just enough architecture for early-stage product work without letting the codebase drift into chaos.",
+    "publishedAt": "2026-08-14",
+    "readingTime": "4 min read",
+    "category": "Product Engineering",
+    "hero": "Good software architecture is not about maximum abstraction. It is about keeping change cheap while the business is still learning.",
+    "sections": [
+      {
+        "title": "Start with the shape of the work",
+        "body": "Most product teams do not need a grand architecture on day one. They need clear ownership of data, reusable service functions, and a UI layer that does not hide business decisions inside components."
+      },
+      {
+        "title": "Make the boring path obvious",
+        "body": "A useful codebase makes common changes easy to perform safely. That means typed inputs, predictable file boundaries, and functions that can be reused before they become wrappers for one screen."
+      },
+      {
+        "title": "Delay complexity until it earns rent",
+        "body": "The strongest early systems leave room for scale without pretending scale already exists. Add queues, caches, orchestration, and abstractions when the operational pressure is real."
+      }
+    ]
+  },
+  {
+    "slug": "what-good-internal-tools-get-right",
+    "title": "What Good Internal Tools Get Right",
+    "description": "Internal tools are not side projects. The best ones compress decisions, reduce repetitive work, and make operations visible.",
+    "publishedAt": "2026-08-10",
+    "readingTime": "5 min read",
+    "category": "Systems",
+    "hero": "A good internal tool does not simply expose database tables. It gives a team a faster way to make the same high-quality decision every day.",
+    "sections": [
+      {
+        "title": "Design around the repeated decision",
+        "body": "The core question is not what data exists. The core question is what decision someone keeps making with that data. The interface should make that decision obvious."
+      },
+      {
+        "title": "Put workflow before widgets",
+        "body": "Tables, filters, and forms matter, but they are not the product. The product is the operational flow: review, decide, act, audit, and recover when something goes wrong."
+      },
+      {
+        "title": "Keep escape hatches visible",
+        "body": "Real operations include exceptions. Good tools make the happy path fast while keeping manual override, notes, history, and failure states easy to inspect."
+      }
+    ]
+  },
+  {
+    "slug": "fast-websites-are-product-decisions",
+    "title": "Fast Websites Are Product Decisions",
+    "description": "Performance is not just a technical score. It changes trust, conversion, and the amount of attention users are willing to spend.",
+    "publishedAt": "2026-08-03",
+    "readingTime": "3 min read",
+    "category": "Frontend",
+    "hero": "A fast site feels more competent before a user reads a single sentence. That makes performance a brand and product decision, not just an engineering cleanup task.",
+    "sections": [
+      {
+        "title": "Speed changes the first impression",
+        "body": "Users read latency as uncertainty. When the page feels instant, the product feels more intentional and the user has fewer reasons to leave."
+      },
+      {
+        "title": "Clarity beats decoration",
+        "body": "The fastest experiences are usually the clearest ones. Good hierarchy, focused copy, and restrained assets do more for conversion than decorative complexity."
+      },
+      {
+        "title": "Measure what the user feels",
+        "body": "Performance work should map to user perception: first content, interaction readiness, layout stability, and the time it takes to complete the main action."
+      }
+    ]
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "name": "Neup Kishor",
+  "role": "Full-Stack Developer",
+  "location": "Nepal",
+  "email": "hello@neupkishor.com",
+  "tagline": "Sharp web products, internal systems, and automation for teams that need execution with technical judgment.",
+  "socials": [
+    {
+      "label": "Website",
+      "href": "https://neupkishor.com"
+    },
+    {
+      "label": "GitHub",
+      "href": "https://github.com/neupkishor"
+    },
+    {
+      "label": "LinkedIn",
+      "href": "https://www.linkedin.com/in/neupkishor"
+    }
+  ]
+}

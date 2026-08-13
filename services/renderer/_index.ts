@@ -19,17 +19,64 @@ export type RendererDomainData = {
 };
 
 export type RendererButtonProps = {
+  variant?: "primary" | "secondary";
   buttonLink: string;
   buttonTitle: string;
+};
+
+export type RendererLink = {
+  href: string;
+  label: string;
+};
+
+export type RendererTextBlock = {
+  description: string;
+  title: string;
+};
+
+export type RendererStat = {
+  label: string;
+  value: string;
+};
+
+export type RendererBlogSection = {
+  body: string;
+  title: string;
+};
+
+export type RendererBlogPost = {
+  category: string;
+  description: string;
+  hero: string;
+  publishedAt: string;
+  readingTime: string;
+  sections: RendererBlogSection[];
+  slug: string;
+  title: string;
 };
 
 export type RendererPageContent = {
   componentProps: {
     button: RendererButtonProps;
+    secondaryButton: RendererButtonProps;
   };
   domain: string;
   eyebrow: string;
   heading: string;
+  highlights: string[];
+  navigation: RendererLink[];
+  process: string[];
+  profile: {
+    email: string;
+    location: string;
+    name: string;
+    role: string;
+    socials: RendererLink[];
+    tagline: string;
+  };
+  proof: string[];
+  services: RendererTextBlock[];
+  stats: RendererStat[];
   summary: string;
   theme: RendererTheme;
   warnings: string[];
@@ -44,6 +91,142 @@ function getDomainDataDirectory(domain: string) {
 async function readJsonFile(filePath: string) {
   const raw = await readFile(filePath, "utf8");
   return JSON.parse(raw) as unknown;
+}
+
+function asRecord(source: unknown) {
+  return source && typeof source === "object" && !Array.isArray(source)
+    ? (source as Record<string, unknown>)
+    : {};
+}
+
+function readString(source: Record<string, unknown>, key: string) {
+  const value = source[key];
+  return typeof value === "string" && value.trim().length > 0
+    ? value
+    : undefined;
+}
+
+function readStringArray(source: Record<string, unknown>, key: string) {
+  const value = source[key];
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === "string")
+    : [];
+}
+
+function readLinks(source: unknown) {
+  return Array.isArray(source)
+    ? source
+        .map((item) => {
+          const record = asRecord(item);
+          const href = readString(record, "href");
+          const label = readString(record, "label");
+
+          return href && label ? { href, label } : undefined;
+        })
+        .filter((item): item is RendererLink => Boolean(item))
+    : [];
+}
+
+function readTextBlocks(source: unknown) {
+  return Array.isArray(source)
+    ? source
+        .map((item) => {
+          const record = asRecord(item);
+          const title = readString(record, "title");
+          const description = readString(record, "description");
+
+          return title && description ? { title, description } : undefined;
+        })
+        .filter((item): item is RendererTextBlock => Boolean(item))
+    : [];
+}
+
+function readStats(source: unknown) {
+  return Array.isArray(source)
+    ? source
+        .map((item) => {
+          const record = asRecord(item);
+          const label = readString(record, "label");
+          const value = readString(record, "value");
+
+          return label && value ? { label, value } : undefined;
+        })
+        .filter((item): item is RendererStat => Boolean(item))
+    : [];
+}
+
+function readBlogSections(source: unknown) {
+  return Array.isArray(source)
+    ? source
+        .map((item) => {
+          const record = asRecord(item);
+          const title = readString(record, "title");
+          const body = readString(record, "body");
+
+          return title && body ? { title, body } : undefined;
+        })
+        .filter((item): item is RendererBlogSection => Boolean(item))
+    : [];
+}
+
+function readBlogPosts(source: unknown) {
+  return Array.isArray(source)
+    ? source
+        .map((item) => {
+          const record = asRecord(item);
+          const slug = readString(record, "slug");
+          const title = readString(record, "title");
+          const description = readString(record, "description");
+
+          if (!slug || !title || !description) {
+            return undefined;
+          }
+
+          return {
+            category: readString(record, "category") ?? "Writing",
+            description,
+            hero: readString(record, "hero") ?? description,
+            publishedAt: readString(record, "publishedAt") ?? "",
+            readingTime: readString(record, "readingTime") ?? "Read",
+            sections: readBlogSections(record.sections),
+            slug,
+            title,
+          };
+        })
+        .filter((item): item is RendererBlogPost => Boolean(item))
+    : [];
+}
+
+function getPageData(files: Record<string, RendererDataFile>, domain: string) {
+  const page = asRecord(files.page?.data);
+  const hero = asRecord(page.hero);
+  const cta = asRecord(page.cta);
+  const secondaryCta = asRecord(page.secondaryCta);
+  const profile = asRecord(files.profile?.data);
+
+  return {
+    buttonLink: readString(cta, "buttonLink") ?? `https://${domain}`,
+    buttonTitle: readString(cta, "buttonTitle") ?? "Open Website",
+    email: readString(profile, "email") ?? `hello@${domain}`,
+    eyebrow: readString(hero, "eyebrow") ?? "Renderer Service",
+    heading: readString(hero, "heading") ?? `Rendering ${domain}`,
+    highlights: readStringArray(page, "highlights"),
+    location: readString(profile, "location") ?? "Remote",
+    name: readString(profile, "name") ?? domain,
+    navigation: readLinks(files.navigation?.data),
+    process: readStringArray(page, "process"),
+    profileTagline: readString(profile, "tagline") ?? "",
+    proof: readStringArray(page, "proof"),
+    role: readString(profile, "role") ?? "Developer",
+    secondaryButtonLink: readString(secondaryCta, "buttonLink") ?? "#offer",
+    secondaryButtonTitle: readString(secondaryCta, "buttonTitle") ?? "Learn More",
+    services: readTextBlocks(page.services),
+    socials: readLinks(profile.socials),
+    stats: readStats(page.stats),
+    summary:
+      readString(hero, "summary") ??
+      "This page is generated from the domain data files through the renderer service layer.",
+  };
 }
 
 export async function readRendererData(
@@ -95,20 +278,65 @@ export async function getRendererPageContent(
   domain: string,
 ): Promise<RendererPageContent> {
   const rendererData = await readRendererData(domain);
+  const page = getPageData(rendererData.files, rendererData.domain);
 
   return {
     componentProps: {
       button: {
-        buttonLink: "https://neupkishor.com",
-        buttonTitle: "Open Website",
+        buttonLink: page.buttonLink,
+        buttonTitle: page.buttonTitle,
+      },
+      secondaryButton: {
+        buttonLink: page.secondaryButtonLink,
+        buttonTitle: page.secondaryButtonTitle,
+        variant: "secondary",
       },
     },
     domain: rendererData.domain,
-    eyebrow: "Renderer Service",
-    heading: `Rendering ${rendererData.domain}`,
-    summary:
-      "This page is generated from the domain data files through the renderer service layer.",
+    eyebrow: page.eyebrow,
+    heading: page.heading,
+    highlights: page.highlights,
+    navigation: page.navigation,
+    process: page.process,
+    profile: {
+      email: page.email,
+      location: page.location,
+      name: page.name,
+      role: page.role,
+      socials: page.socials,
+      tagline: page.profileTagline,
+    },
+    proof: page.proof,
+    services: page.services,
+    stats: page.stats,
+    summary: page.summary,
     theme: rendererData.theme,
     warnings: rendererData.readErrors,
   };
+}
+
+export async function getRendererBlogsContent(domain: string) {
+  const rendererData = await readRendererData(domain);
+
+  return {
+    blogs: readBlogPosts(rendererData.files.blogs?.data),
+    domain: rendererData.domain,
+    theme: rendererData.theme,
+    warnings: rendererData.readErrors,
+  };
+}
+
+export async function getRendererBlogPostContent(domain: string, slug: string) {
+  const blogsContent = await getRendererBlogsContent(domain);
+  const blog = blogsContent.blogs.find((item) => item.slug === slug);
+
+  return {
+    ...blogsContent,
+    blog,
+  };
+}
+
+export async function getRendererBlogStaticParams(domain: string) {
+  const blogsContent = await getRendererBlogsContent(domain);
+  return blogsContent.blogs.map((blog) => ({ slug: blog.slug }));
 }
