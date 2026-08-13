@@ -3,13 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
-    "db:pull": "prisma db pull",
-    "db:generate": "prisma generate",
-    "db:sync": "prisma db pull && prisma generate"
+    "setup": "rm -rf core && rm -rf logica && rm -rf neup.core && rm -rf neup.logica && git clone https://github.com/neupgroup/neup.core && git clone https://github.com/neupgroup/neup.logica && mv neup.core core && mv neup.logica logica && cd core && rm -rf database",
+    "prebuild": "npm run setup",
+    "predev": "npm run setup",
+
+    "dev": "next dev --turbopack --experimental-https --port 27754",
+    "build": "npx prisma generate && npx next build",
+    "start": "next start --port 27754",
+    "postinstall": "patch-package",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@next/env": "^16.2.1",
