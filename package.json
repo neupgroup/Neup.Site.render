@@ -6,9 +6,8 @@
     "setup": "rm -rf core && rm -rf logica && rm -rf neup.core && rm -rf neup.logica && git clone https://github.com/neupgroup/neup.core && git clone https://github.com/neupgroup/neup.logica && mv neup.core core && mv neup.logica logica && cd core && rm -rf database",
     "prebuild": "npm run setup",
     "predev": "npm run setup",
-
-    "dev": "next dev --turbopack --experimental-https --port 27754",
-    "build": "npx prisma generate && npx next build",
+    "dev": "next dev --turbopack --port 27754",
+    "build": "npx next build",
     "start": "next start --port 27754",
     "postinstall": "patch-package",
     "lint": "next lint",
@@ -18,11 +17,13 @@
     "@next/env": "^16.2.1",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
+    "clsx": "^2.1.1",
     "next": "16.2.1",
     "pg": "^8.21.0",
     "prisma": "^7.8.0",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
