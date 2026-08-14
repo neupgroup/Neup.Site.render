@@ -82,6 +82,25 @@ export type RendererPageContent = {
   warnings: string[];
 };
 
+export type RendererSiteManifest = {
+  description: string;
+  domain: string;
+  favicon: string;
+  locale: string;
+  name: string;
+  title: string;
+};
+
+export type RendererRouteMetadata = {
+  canonicalPath: string;
+  description: string;
+  domain: string;
+  faviconPath: string;
+  locale: string;
+  name: string;
+  title: string;
+};
+
 const dataRoot = path.join(process.cwd(), "data");
 const rendererEngineRedirectUrl = "https://neupgroup.com/site";
 
@@ -216,6 +235,26 @@ function readBlogPosts(source: unknown) {
     : [];
 }
 
+function getManifestData(
+  files: Record<string, RendererDataFile>,
+  domain: string,
+): RendererSiteManifest {
+  const manifest = asRecord(files.manifest?.data);
+  const page = getPageData(files, domain);
+
+  return {
+    description:
+      readString(manifest, "description") ?? page.summary,
+    domain: readString(manifest, "domain") ?? domain,
+    favicon: readString(manifest, "favicon") ?? "favicon.ico",
+    locale: readString(manifest, "locale") ?? "en",
+    name: readString(manifest, "name") ?? page.name,
+    title:
+      readString(manifest, "title") ??
+      `${page.name} - ${page.role}`,
+  };
+}
+
 function getPageData(files: Record<string, RendererDataFile>, domain: string) {
   const page = asRecord(files.page?.data);
   const hero = asRecord(page.hero);
@@ -290,6 +329,63 @@ export async function readRendererData(
     files,
     readErrors,
     theme: normalizeRendererTheme(files.theme?.data),
+  };
+}
+
+export async function readRendererAsset(domain: string, assetName: string) {
+  const normalizedAssetName = path.basename(assetName);
+  const assetPath = path.join(getDomainDataDirectory(domain), normalizedAssetName);
+
+  return readFile(assetPath);
+}
+
+export async function getRendererSiteManifest(
+  domain: string,
+): Promise<RendererSiteManifest> {
+  const rendererData = await readRendererData(domain);
+  return getManifestData(rendererData.files, rendererData.domain);
+}
+
+export async function getRendererRouteMetadata(
+  domain: string,
+  slug: string[],
+): Promise<RendererRouteMetadata> {
+  const rendererData = await readRendererData(domain);
+  const manifest = getManifestData(rendererData.files, rendererData.domain);
+  const blogs = readBlogPosts(rendererData.files.blogs?.data);
+  const normalizedSlug = slug.filter(Boolean);
+  const canonicalPath = normalizedSlug.length
+    ? `/${normalizedSlug.join("/")}`
+    : "/";
+
+  if (normalizedSlug.length === 1 && normalizedSlug[0] === "blogs") {
+    return {
+      ...manifest,
+      canonicalPath,
+      faviconPath: "/favicon.ico",
+      title: `${manifest.name} - Blogs`,
+      description: `Writing and notes from ${manifest.name}.`,
+    };
+  }
+
+  if (normalizedSlug.length === 2 && normalizedSlug[0] === "blogs") {
+    const blog = blogs.find((item) => item.slug === normalizedSlug[1]);
+
+    if (blog) {
+      return {
+        ...manifest,
+        canonicalPath,
+        faviconPath: "/favicon.ico",
+        title: `${blog.title} - ${manifest.name}`,
+        description: blog.description,
+      };
+    }
+  }
+
+  return {
+    ...manifest,
+    canonicalPath,
+    faviconPath: "/favicon.ico",
   };
 }
 
