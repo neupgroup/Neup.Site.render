@@ -102,7 +102,7 @@ export type RendererRouteMetadata = {
 };
 
 const dataRoot = path.join(process.cwd(), "data");
-const rendererEngineRedirectUrl = "https://neupgroup.com/site";
+const rendererEngineRedirectUrl = "https://neupgroup.com/sites/about/enroll";
 
 function getDomainDataDirectory(domain: string) {
   return path.join(dataRoot, domain);
@@ -124,8 +124,10 @@ export function shouldRenderSiteForHost(host: string, domain: string) {
   );
 }
 
-export function getRendererEngineRedirectUrl() {
-  return rendererEngineRedirectUrl;
+export function getRendererEngineRedirectUrl(requestedPath: string) {
+  const redirectUrl = new URL(rendererEngineRedirectUrl);
+  redirectUrl.searchParams.set("path", requestedPath);
+  return redirectUrl.toString();
 }
 
 async function readJsonFile(filePath: string) {

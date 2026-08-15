@@ -19,7 +19,7 @@ export default async function Home() {
   const host = (await headers()).get("host") ?? "";
 
   if (!shouldRenderSiteForHost(host, domain)) {
-    redirect(getRendererEngineRedirectUrl());
+    redirect(getRendererEngineRedirectUrl("/"));
   }
 
   return <SitePage slug={[]} />;

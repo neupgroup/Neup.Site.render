@@ -26,11 +26,12 @@ export default async function CatchAllPage({
   params,
 }: CatchAllPageProps) {
   const host = (await headers()).get("host") ?? "";
+  const { slug } = await params;
+  const requestedPath = `/${slug.join("/")}`;
 
   if (!shouldRenderSiteForHost(host, domain)) {
-    redirect(getRendererEngineRedirectUrl());
+    redirect(getRendererEngineRedirectUrl(requestedPath));
   }
 
-  const { slug } = await params;
   return <SitePage slug={slug} />;
 }
