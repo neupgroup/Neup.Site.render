@@ -30,7 +30,7 @@ export default async function CatchAllPage({
   const requestedPath = `/${slug.join("/")}`;
 
   if (!shouldRenderSiteForHost(host, domain)) {
-    redirect(getRendererEngineRedirectUrl(requestedPath));
+    redirect(getRendererEngineRedirectUrl(host, requestedPath));
   }
 
   return <SitePage slug={slug} />;

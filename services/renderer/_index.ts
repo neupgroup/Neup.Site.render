@@ -124,9 +124,17 @@ export function shouldRenderSiteForHost(host: string, domain: string) {
   );
 }
 
-export function getRendererEngineRedirectUrl(requestedPath: string) {
+export function getRendererEngineRedirectUrl(
+  requestedHost: string,
+  requestedPath: string,
+) {
   const redirectUrl = new URL(rendererEngineRedirectUrl);
-  redirectUrl.searchParams.set("path", requestedPath);
+  const normalizedHost = normalizeHost(requestedHost);
+  const requestedUrl = new URL(
+    requestedPath,
+    `https://${normalizedHost || "unknown-host"}`,
+  );
+  redirectUrl.searchParams.set("path", requestedUrl.toString());
   return redirectUrl.toString();
 }
 
