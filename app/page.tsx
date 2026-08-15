@@ -2,25 +2,43 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { toNextMetadata } from "./metadata";
-import SitePage from "@/data/sablegalservice.neup.site/page";
+import NeupKishorSitePage from "@/data/neupkishor.com/page";
+import SablegalserviceSitePage from "@/data/sablegalservice.neup.site/page";
 import {
   getRendererEngineRedirectUrl,
+  getRequestHost,
   getRendererRouteMetadata,
-  shouldRenderSiteForHost,
+  resolveRendererDomainForHost,
+  type RendererSiteDomain,
 } from "@/services/renderer/_index";
 
-const domain = "sablegalservice.neup.site";
+const sitePages = {
+  "neupkishor.com": NeupKishorSitePage,
+  "sablegalservice.neup.site": SablegalserviceSitePage,
+} satisfies Record<RendererSiteDomain, typeof NeupKishorSitePage>;
 
 export async function generateMetadata(): Promise<Metadata> {
+  const requestHeaders = await headers();
+  const host = getRequestHost(requestHeaders);
+  const domain = resolveRendererDomainForHost(host);
+
+  if (!domain) {
+    return toNextMetadata(await getRendererRouteMetadata("sablegalservice.neup.site", []));
+  }
+
   return toNextMetadata(await getRendererRouteMetadata(domain, []));
 }
 
 export default async function Home() {
-  const host = (await headers()).get("host") ?? "";
+  const requestHeaders = await headers();
+  const host = getRequestHost(requestHeaders);
+  const domain = resolveRendererDomainForHost(host);
 
-  if (!shouldRenderSiteForHost(host, domain)) {
+  if (!domain) {
     redirect(getRendererEngineRedirectUrl(host, "/"));
   }
+
+  const SitePage = sitePages[domain];
 
   return <SitePage slug={[]} />;
 }

@@ -103,6 +103,13 @@ export type RendererRouteMetadata = {
 
 const dataRoot = path.join(process.cwd(), "data");
 const rendererEngineRedirectUrl = "https://neupgroup.com/sites/about/enroll";
+const defaultRendererDomain = "sablegalservice.neup.site";
+const rendererSiteDomains = [
+  "neupkishor.com",
+  "sablegalservice.neup.site",
+] as const;
+
+export type RendererSiteDomain = (typeof rendererSiteDomains)[number];
 
 function getDomainDataDirectory(domain: string) {
   return path.join(dataRoot, domain);
@@ -112,16 +119,54 @@ function normalizeHost(host: string) {
   return host.toLowerCase().split(":")[0] ?? "";
 }
 
-export function shouldRenderSiteForHost(host: string, domain: string) {
-  const normalizedHost = normalizeHost(host);
-  const normalizedDomain = normalizeHost(domain);
+function normalizeForwardedHost(host: string) {
+  return host.split(",")[0]?.trim() ?? "";
+}
 
+export function getRequestHost(headers: Pick<Headers, "get">) {
   return (
-    (process.env.NODE_ENV === "development" &&
-      (normalizedHost === "localhost" || normalizedHost === "127.0.0.1")) ||
-    normalizedHost === normalizedDomain ||
-    normalizedHost === `www.${normalizedDomain}`
+    normalizeForwardedHost(headers.get("x-forwarded-host") ?? "") ||
+    normalizeForwardedHost(headers.get("host") ?? "")
   );
+}
+
+export function getDefaultRendererDomain(): RendererSiteDomain {
+  const configuredDomain = process.env.RENDERER_DEFAULT_DOMAIN;
+
+  if (configuredDomain && isRendererSiteDomain(configuredDomain)) {
+    return configuredDomain;
+  }
+
+  return defaultRendererDomain;
+}
+
+export function isRendererSiteDomain(domain: string): domain is RendererSiteDomain {
+  return (rendererSiteDomains as readonly string[]).includes(domain);
+}
+
+export function resolveRendererDomainForHost(
+  host: string,
+): RendererSiteDomain | undefined {
+  const normalizedHost = normalizeHost(host);
+
+  if (
+    process.env.NODE_ENV === "development" &&
+    (normalizedHost === "localhost" || normalizedHost === "127.0.0.1")
+  ) {
+    return getDefaultRendererDomain();
+  }
+
+  return rendererSiteDomains.find((domain) => {
+    const normalizedDomain = normalizeHost(domain);
+    return (
+      normalizedHost === normalizedDomain ||
+      normalizedHost === `www.${normalizedDomain}`
+    );
+  });
+}
+
+export function shouldRenderSiteForHost(host: string, domain: string) {
+  return resolveRendererDomainForHost(host) === domain;
 }
 
 export function getRendererEngineRedirectUrl(

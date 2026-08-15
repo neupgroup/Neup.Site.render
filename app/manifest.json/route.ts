@@ -1,15 +1,15 @@
 import type { NextRequest } from "next/server";
 import {
+  getRequestHost,
   getRendererSiteManifest,
-  shouldRenderSiteForHost,
+  resolveRendererDomainForHost,
 } from "@/services/renderer/_index";
 
-const domain = "sablegalservice.neup.site";
-
 export async function GET(request: NextRequest) {
-  const host = request.headers.get("host") ?? "";
+  const host = getRequestHost(request.headers);
+  const domain = resolveRendererDomainForHost(host);
 
-  if (!shouldRenderSiteForHost(host, domain)) {
+  if (!domain) {
     return Response.json({ error: "Not found" }, { status: 404 });
   }
 

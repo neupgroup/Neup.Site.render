@@ -1,11 +1,10 @@
 import type { NextRequest } from "next/server";
 import {
+  getRequestHost,
   getRendererSiteManifest,
   readRendererAsset,
-  shouldRenderSiteForHost,
+  resolveRendererDomainForHost,
 } from "@/services/renderer/_index";
-
-const domain = "sablegalservice.neup.site";
 
 function getContentType(assetName: string) {
   if (assetName.endsWith(".ico")) {
@@ -24,9 +23,10 @@ function getContentType(assetName: string) {
 }
 
 export async function GET(request: NextRequest) {
-  const host = request.headers.get("host") ?? "";
+  const host = getRequestHost(request.headers);
+  const domain = resolveRendererDomainForHost(host);
 
-  if (!shouldRenderSiteForHost(host, domain)) {
+  if (!domain) {
     return new Response("Not found", { status: 404 });
   }
 
