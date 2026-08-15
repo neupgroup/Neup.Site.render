@@ -4,7 +4,7 @@ import {
   shouldRenderSiteForHost,
 } from "@/services/renderer/_index";
 
-const domain = "neupkishor.com";
+const domain = "sablegalservice.neup.site";
 
 export async function GET(request: NextRequest) {
   const host = request.headers.get("host") ?? "";
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
         {
           src: "/favicon.ico",
           sizes: "any",
-          type: "image/x-icon",
+          type: manifest.favicon.endsWith(".png") ? "image/png" : "image/x-icon",
         },
       ],
     },

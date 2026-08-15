@@ -1,0 +1,64 @@
+{
+  "hero": {
+    "eyebrow": "Legal advisory and representation",
+    "heading": "SAB Legal Service",
+    "summary": "Clear legal strategy, careful documentation, and steady representation for people and organizations facing important decisions.",
+    "availability": "Private consultations by appointment"
+  },
+  "cta": {
+    "buttonTitle": "Request Consultation",
+    "buttonLink": "mailto:contact@sablegalservice.neup.site"
+  },
+  "secondaryCta": {
+    "buttonTitle": "View Practice Areas",
+    "buttonLink": "#practice"
+  },
+  "highlights": [
+    "Business, corporate, and compliance advisory",
+    "Civil disputes, property matters, and negotiated settlements",
+    "Contracts, petitions, affidavits, and legal documentation",
+    "Confidential counsel for families, founders, and institutions"
+  ],
+  "stats": [
+    {
+      "label": "Consultations",
+      "value": "By appointment"
+    },
+    {
+      "label": "Engagement",
+      "value": "Confidential"
+    },
+    {
+      "label": "Focus",
+      "value": "Practical resolution"
+    }
+  ],
+  "services": [
+    {
+      "title": "Corporate and Business Counsel",
+      "description": "Entity setup, operational agreements, governance support, compliance review, and ongoing legal guidance for growing businesses."
+    },
+    {
+      "title": "Civil and Property Matters",
+      "description": "Structured advice for disputes, ownership questions, transactions, documentation review, and settlement strategy."
+    },
+    {
+      "title": "Family and Personal Legal Support",
+      "description": "Discreet legal help for family documentation, succession planning, affidavits, petitions, and sensitive personal matters."
+    },
+    {
+      "title": "Contracts and Documentation",
+      "description": "Drafting, review, negotiation support, and risk checks for contracts, notices, letters, deeds, and formal filings."
+    }
+  ],
+  "proof": [
+    "Every matter begins with facts, documents, risk, and a practical route forward.",
+    "Clients receive plain-language advice before formal filings or negotiations begin.",
+    "The work is handled with confidentiality, preparation, and respect for timelines."
+  ],
+  "process": [
+    "Initial consultation to understand the matter, parties, documents, and desired outcome.",
+    "Legal review with a clear assessment of risks, options, timelines, and likely next steps.",
+    "Execution through documentation, negotiation, filing support, or representation as required."
+  ]
+}

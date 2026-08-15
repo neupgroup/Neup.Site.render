@@ -117,6 +117,8 @@ export function shouldRenderSiteForHost(host: string, domain: string) {
   const normalizedDomain = normalizeHost(domain);
 
   return (
+    (process.env.NODE_ENV === "development" &&
+      (normalizedHost === "localhost" || normalizedHost === "127.0.0.1")) ||
     normalizedHost === normalizedDomain ||
     normalizedHost === `www.${normalizedDomain}`
   );

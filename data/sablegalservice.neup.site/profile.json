@@ -1,0 +1,17 @@
+{
+  "name": "SAB Legal Service",
+  "role": "Legal Advisory and Representation",
+  "location": "Nepal",
+  "email": "contact@sablegalservice.neup.site",
+  "tagline": "Measured legal counsel for business, civil, property, family, and documentation matters.",
+  "socials": [
+    {
+      "label": "Email",
+      "href": "mailto:contact@sablegalservice.neup.site"
+    },
+    {
+      "label": "Website",
+      "href": "https://sablegalservice.neup.site"
+    }
+  ]
+}

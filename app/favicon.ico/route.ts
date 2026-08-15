@@ -5,7 +5,7 @@ import {
   shouldRenderSiteForHost,
 } from "@/services/renderer/_index";
 
-const domain = "neupkishor.com";
+const domain = "sablegalservice.neup.site";
 
 function getContentType(assetName: string) {
   if (assetName.endsWith(".ico")) {
