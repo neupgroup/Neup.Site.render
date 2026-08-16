@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Advocate S. B.",
+    "role": "Lead Counsel",
+    "bio": "Advises clients on civil disputes, property documentation, legal notices, contract risk, and representation strategy.",
+    "phone": "+977-9800000000",
+    "email": "contact@sablegalservice.neup.site",
+    "credentials": [
+      "Sample Nepal Bar registration",
+      "Civil and commercial matters",
+      "Consultation and representation support"
+    ],
+    "focus": [
+      "Property and civil disputes",
+      "Legal notices and replies",
+      "Contracts and settlement strategy"
+    ]
+  },
+  {
+    "name": "SAB Documentation Desk",
+    "role": "Client Intake and Document Review",
+    "bio": "Coordinates consultation requests, document checklists, appointment scheduling, and matter summaries before counsel review.",
+    "phone": "+977-9800000000",
+    "email": "contact@sablegalservice.neup.site",
+    "credentials": [
+      "Confidential intake coordination",
+      "Document checklist preparation",
+      "Deadline and appointment tracking"
+    ],
+    "focus": [
+      "New matter intake",
+      "Document organization",
+      "Consultation preparation"
+    ]
+  },
+  {
+    "name": "SAB Corporate Support",
+    "role": "Business and Compliance Support",
+    "bio": "Supports company setup, agreement review, founder documentation, compliance records, and business risk follow-up.",
+    "phone": "+977-9800000000",
+    "email": "contact@sablegalservice.neup.site",
+    "credentials": [
+      "Business document support",
+      "Founder and company records",
+      "Contract review coordination"
+    ],
+    "focus": [
+      "Company setup",
+      "Founder agreements",
+      "Operational compliance"
+    ]
+  }
+]

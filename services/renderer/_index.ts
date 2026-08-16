@@ -6,6 +6,8 @@ import {
   type RendererTheme,
 } from "./theme";
 
+export type { RendererTheme } from "./theme";
+
 export type RendererDataFile = {
   data: unknown;
   name: string;
@@ -39,6 +41,28 @@ export type RendererStat = {
   value: string;
 };
 
+export type RendererContactMethod = {
+  href: string;
+  label: string;
+  value: string;
+};
+
+export type RendererCredential = {
+  detail: string;
+  label: string;
+};
+
+export type RendererFaq = {
+  answer: string;
+  question: string;
+};
+
+export type RendererTestimonial = {
+  name: string;
+  quote: string;
+  role: string;
+};
+
 export type RendererBlogSection = {
   body: string;
   title: string;
@@ -55,6 +79,16 @@ export type RendererBlogPost = {
   title: string;
 };
 
+export type RendererTeamMember = {
+  bio: string;
+  credentials: string[];
+  email: string;
+  focus: string[];
+  name: string;
+  phone: string;
+  role: string;
+};
+
 export type RendererPageContent = {
   componentProps: {
     button: RendererButtonProps;
@@ -67,14 +101,26 @@ export type RendererPageContent = {
   navigation: RendererLink[];
   process: string[];
   profile: {
+    address: string;
     email: string;
     location: string;
     name: string;
+    phone: string;
     role: string;
     socials: RendererLink[];
     tagline: string;
+    whatsapp: string;
   };
   proof: string[];
+  sales: {
+    contactMethods: RendererContactMethod[];
+    credentials: RendererCredential[];
+    documents: string[];
+    faqs: RendererFaq[];
+    serviceDetails: RendererTextBlock[];
+    testimonials: RendererTestimonial[];
+    trustLogos: string[];
+  };
   services: RendererTextBlock[];
   stats: RendererStat[];
   summary: string;
@@ -250,6 +296,64 @@ function readStats(source: unknown) {
     : [];
 }
 
+function readContactMethods(source: unknown) {
+  return Array.isArray(source)
+    ? source
+        .map((item) => {
+          const record = asRecord(item);
+          const label = readString(record, "label");
+          const value = readString(record, "value");
+          const href = readString(record, "href");
+
+          return label && value && href ? { href, label, value } : undefined;
+        })
+        .filter((item): item is RendererContactMethod => Boolean(item))
+    : [];
+}
+
+function readCredentials(source: unknown) {
+  return Array.isArray(source)
+    ? source
+        .map((item) => {
+          const record = asRecord(item);
+          const label = readString(record, "label");
+          const detail = readString(record, "detail");
+
+          return label && detail ? { detail, label } : undefined;
+        })
+        .filter((item): item is RendererCredential => Boolean(item))
+    : [];
+}
+
+function readFaqs(source: unknown) {
+  return Array.isArray(source)
+    ? source
+        .map((item) => {
+          const record = asRecord(item);
+          const question = readString(record, "question");
+          const answer = readString(record, "answer");
+
+          return question && answer ? { answer, question } : undefined;
+        })
+        .filter((item): item is RendererFaq => Boolean(item))
+    : [];
+}
+
+function readTestimonials(source: unknown) {
+  return Array.isArray(source)
+    ? source
+        .map((item) => {
+          const record = asRecord(item);
+          const name = readString(record, "name");
+          const role = readString(record, "role");
+          const quote = readString(record, "quote");
+
+          return name && role && quote ? { name, quote, role } : undefined;
+        })
+        .filter((item): item is RendererTestimonial => Boolean(item))
+    : [];
+}
+
 function readBlogSections(source: unknown) {
   return Array.isArray(source)
     ? source
@@ -292,6 +396,33 @@ function readBlogPosts(source: unknown) {
     : [];
 }
 
+function readTeamMembers(source: unknown) {
+  return Array.isArray(source)
+    ? source
+        .map((item) => {
+          const record = asRecord(item);
+          const name = readString(record, "name");
+          const role = readString(record, "role");
+          const bio = readString(record, "bio");
+
+          if (!name || !role || !bio) {
+            return undefined;
+          }
+
+          return {
+            bio,
+            credentials: readStringArray(record, "credentials"),
+            email: readString(record, "email") ?? "",
+            focus: readStringArray(record, "focus"),
+            name,
+            phone: readString(record, "phone") ?? "",
+            role,
+          };
+        })
+        .filter((item): item is RendererTeamMember => Boolean(item))
+    : [];
+}
+
 function getManifestData(
   files: Record<string, RendererDataFile>,
   domain: string,
@@ -318,8 +449,10 @@ function getPageData(files: Record<string, RendererDataFile>, domain: string) {
   const cta = asRecord(page.cta);
   const secondaryCta = asRecord(page.secondaryCta);
   const profile = asRecord(files.profile?.data);
+  const sales = asRecord(page.sales);
 
   return {
+    address: readString(profile, "address") ?? "Sample office address, Nepal",
     buttonLink: readString(cta, "buttonLink") ?? `https://${domain}`,
     buttonTitle: readString(cta, "buttonTitle") ?? "Open Website",
     email: readString(profile, "email") ?? `hello@${domain}`,
@@ -329,6 +462,7 @@ function getPageData(files: Record<string, RendererDataFile>, domain: string) {
     location: readString(profile, "location") ?? "Remote",
     name: readString(profile, "name") ?? domain,
     navigation: readLinks(files.navigation?.data),
+    phone: readString(profile, "phone") ?? "+977-9800000000",
     process: readStringArray(page, "process"),
     profileTagline: readString(profile, "tagline") ?? "",
     proof: readStringArray(page, "proof"),
@@ -338,9 +472,19 @@ function getPageData(files: Record<string, RendererDataFile>, domain: string) {
     services: readTextBlocks(page.services),
     socials: readLinks(profile.socials),
     stats: readStats(page.stats),
+    sales: {
+      contactMethods: readContactMethods(sales.contactMethods),
+      credentials: readCredentials(sales.credentials),
+      documents: readStringArray(sales, "documents"),
+      faqs: readFaqs(sales.faqs),
+      serviceDetails: readTextBlocks(sales.serviceDetails),
+      testimonials: readTestimonials(sales.testimonials),
+      trustLogos: readStringArray(sales, "trustLogos"),
+    },
     summary:
       readString(hero, "summary") ??
       "This page is generated from the domain data files through the renderer service layer.",
+    whatsapp: readString(profile, "whatsapp") ?? "https://wa.me/9779800000000",
   };
 }
 
@@ -391,9 +535,15 @@ export async function readRendererData(
 
 export async function readRendererAsset(domain: string, assetName: string) {
   const normalizedAssetName = path.basename(assetName);
-  const assetPath = path.join(getDomainDataDirectory(domain), normalizedAssetName);
+  const directory = getDomainDataDirectory(domain);
+  const publicAssetPath = path.join(directory, "public", normalizedAssetName);
+  const assetPath = path.join(directory, normalizedAssetName);
 
-  return readFile(assetPath);
+  try {
+    return await readFile(publicAssetPath);
+  } catch {
+    return readFile(assetPath);
+  }
 }
 
 export async function getRendererSiteManifest(
@@ -415,17 +565,23 @@ export async function getRendererRouteMetadata(
     ? `/${normalizedSlug.join("/")}`
     : "/";
 
-  if (normalizedSlug.length === 1 && normalizedSlug[0] === "blogs") {
+  if (
+    normalizedSlug.length === 1 &&
+    (normalizedSlug[0] === "blog" || normalizedSlug[0] === "blogs")
+  ) {
     return {
       ...manifest,
       canonicalPath,
       faviconPath: "/favicon.ico",
-      title: `${manifest.name} - Blogs`,
+      title: `${manifest.name} - Blog`,
       description: `Writing and notes from ${manifest.name}.`,
     };
   }
 
-  if (normalizedSlug.length === 2 && normalizedSlug[0] === "blogs") {
+  if (
+    normalizedSlug.length === 2 &&
+    (normalizedSlug[0] === "blog" || normalizedSlug[0] === "blogs")
+  ) {
     const blog = blogs.find((item) => item.slug === normalizedSlug[1]);
 
     if (blog) {
@@ -437,6 +593,19 @@ export async function getRendererRouteMetadata(
         description: blog.description,
       };
     }
+  }
+
+  if (
+    normalizedSlug.length === 1 &&
+    (normalizedSlug[0] === "our-team" || normalizedSlug[0] === "team")
+  ) {
+    return {
+      ...manifest,
+      canonicalPath,
+      faviconPath: "/favicon.ico",
+      title: `${manifest.name} - Our Team`,
+      description: `Meet the legal team behind ${manifest.name}.`,
+    };
   }
 
   return {
@@ -471,14 +640,18 @@ export async function getRendererPageContent(
     navigation: page.navigation,
     process: page.process,
     profile: {
+      address: page.address,
       email: page.email,
       location: page.location,
       name: page.name,
+      phone: page.phone,
       role: page.role,
       socials: page.socials,
       tagline: page.profileTagline,
+      whatsapp: page.whatsapp,
     },
     proof: page.proof,
+    sales: page.sales,
     services: page.services,
     stats: page.stats,
     summary: page.summary,
@@ -511,4 +684,15 @@ export async function getRendererBlogPostContent(domain: string, slug: string) {
 export async function getRendererBlogStaticParams(domain: string) {
   const blogsContent = await getRendererBlogsContent(domain);
   return blogsContent.blogs.map((blog) => ({ slug: blog.slug }));
+}
+
+export async function getRendererTeamContent(domain: string) {
+  const rendererData = await readRendererData(domain);
+
+  return {
+    domain: rendererData.domain,
+    team: readTeamMembers(rendererData.files.team?.data),
+    theme: rendererData.theme,
+    warnings: rendererData.readErrors,
+  };
 }

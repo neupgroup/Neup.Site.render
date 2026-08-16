@@ -1,0 +1,71 @@
+[
+  {
+    "slug": "what-to-prepare-before-a-legal-consultation",
+    "title": "What To Prepare Before A Legal Consultation",
+    "description": "A practical checklist for organizing facts, documents, deadlines, and questions before speaking with a lawyer.",
+    "publishedAt": "2026-08-16",
+    "readingTime": "4 min read",
+    "category": "Consultation",
+    "hero": "A useful consultation starts before the meeting. The clearer your facts and documents are, the easier it is to identify risk and choose the next step.",
+    "sections": [
+      {
+        "title": "Start with the timeline",
+        "body": "Write the important dates in order, including agreements, payments, notices, meetings, filings, and deadlines. A timeline helps counsel separate urgent facts from background detail."
+      },
+      {
+        "title": "Bring the primary documents",
+        "body": "Share signed agreements, deeds, notices, company papers, citizenship copies, letters, receipts, messages, and any court or government documents connected to the matter."
+      },
+      {
+        "title": "Name the parties clearly",
+        "body": "List the people, companies, offices, and representatives involved. Include phone numbers, addresses, relationship context, and the role each person played."
+      }
+    ]
+  },
+  {
+    "slug": "do-not-ignore-a-legal-notice",
+    "title": "Do Not Ignore A Legal Notice",
+    "description": "Why legal notices should be reviewed quickly, even when the facts feel simple or the demand seems unfair.",
+    "publishedAt": "2026-08-12",
+    "readingTime": "3 min read",
+    "category": "Disputes",
+    "hero": "A legal notice is not just a letter. It can set dates, preserve claims, shape negotiation, and create avoidable risk when left unanswered.",
+    "sections": [
+      {
+        "title": "Check the deadline first",
+        "body": "Some notices expect a reply within a stated period. Even when the deadline is not final, delay can weaken negotiation position or make the other side's version look uncontested."
+      },
+      {
+        "title": "Review the facts before replying",
+        "body": "A fast emotional response can create problems. Compare the notice against documents, messages, payment records, ownership papers, and previous communication before deciding what to say."
+      },
+      {
+        "title": "Choose the response path",
+        "body": "The right next step may be a formal reply, a request for documents, settlement communication, preservation of evidence, or preparation for filing."
+      }
+    ]
+  },
+  {
+    "slug": "contract-review-before-signing",
+    "title": "Contract Review Before Signing",
+    "description": "A short guide to reviewing obligations, payment terms, exit rights, and dispute clauses before signing a contract.",
+    "publishedAt": "2026-08-08",
+    "readingTime": "5 min read",
+    "category": "Contracts",
+    "hero": "The best time to understand a contract is before the signature, when risk can still be priced, revised, or rejected.",
+    "sections": [
+      {
+        "title": "Read obligations both ways",
+        "body": "A contract should make each party's responsibilities clear. Review what must be delivered, when it must happen, what proof is required, and what happens when performance is late."
+      },
+      {
+        "title": "Check payment and termination",
+        "body": "Payment dates, penalties, refunds, termination rights, renewal terms, and notice periods often matter more in a dispute than the general promises at the top of the agreement."
+      },
+      {
+        "title": "Understand the dispute clause",
+        "body": "Jurisdiction, arbitration, governing law, notice method, and document language can change how expensive and practical enforcement becomes."
+      }
+    ]
+  }
+]

@@ -4,12 +4,24 @@
     "href": "#practice"
   },
   {
-    "label": "Approach",
-    "href": "#approach"
+    "label": "Blog",
+    "href": "/blog"
   },
   {
-    "label": "Counsel",
-    "href": "#counsel"
+    "label": "Our Team",
+    "href": "/our-team"
+  },
+  {
+    "label": "Services",
+    "href": "#services"
+  },
+  {
+    "label": "Trust",
+    "href": "#trust"
+  },
+  {
+    "label": "Fees",
+    "href": "#fees"
   },
   {
     "label": "Contact",

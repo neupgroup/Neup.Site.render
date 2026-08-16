@@ -1,10 +1,21 @@
 {
   "name": "SAB Legal Service",
   "role": "Legal Advisory and Representation",
-  "location": "Nepal",
+  "location": "Kathmandu, Nepal",
+  "address": "Sample office address, Kathmandu, Nepal",
+  "phone": "+977-9800000000",
+  "whatsapp": "https://wa.me/9779800000000",
   "email": "contact@sablegalservice.neup.site",
-  "tagline": "Measured legal counsel for business, civil, property, family, and documentation matters.",
+  "tagline": "Consult a lawyer before a document, dispute, or deadline becomes expensive.",
   "socials": [
+    {
+      "label": "Call",
+      "href": "tel:+9779800000000"
+    },
+    {
+      "label": "WhatsApp",
+      "href": "https://wa.me/9779800000000"
+    },
     {
       "label": "Email",
       "href": "mailto:contact@sablegalservice.neup.site"

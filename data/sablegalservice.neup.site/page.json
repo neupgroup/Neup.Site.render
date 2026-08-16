@@ -1,64 +1,157 @@
 {
   "hero": {
-    "eyebrow": "Legal advisory and representation",
+    "eyebrow": "Private legal consultation in Nepal",
     "heading": "SAB Legal Service",
-    "summary": "Clear legal strategy, careful documentation, and steady representation for people and organizations facing important decisions.",
-    "availability": "Private consultations by appointment"
+    "summary": "Get clear advice, document review, and representation support before a business, property, family, or civil matter turns into a bigger risk.",
+    "availability": "Same-day consultation slots when available"
   },
   "cta": {
-    "buttonTitle": "Request Consultation",
-    "buttonLink": "mailto:contact@sablegalservice.neup.site"
+    "buttonTitle": "Call Now",
+    "buttonLink": "tel:+9779800000000"
   },
   "secondaryCta": {
-    "buttonTitle": "View Practice Areas",
-    "buttonLink": "#practice"
+    "buttonTitle": "Send WhatsApp",
+    "buttonLink": "https://wa.me/9779800000000"
   },
   "highlights": [
-    "Business, corporate, and compliance advisory",
-    "Civil disputes, property matters, and negotiated settlements",
-    "Contracts, petitions, affidavits, and legal documentation",
-    "Confidential counsel for families, founders, and institutions"
+    "Property disputes, deeds, ownership review, and settlement strategy",
+    "Company setup, contracts, notices, compliance, and founder matters",
+    "Family documentation, succession, petitions, affidavits, and filings",
+    "Confidential consultation by phone, WhatsApp, email, or appointment"
   ],
   "stats": [
     {
-      "label": "Consultations",
-      "value": "By appointment"
+      "label": "Response",
+      "value": "Same day"
     },
     {
-      "label": "Engagement",
+      "label": "First step",
+      "value": "Risk review"
+    },
+    {
+      "label": "Privacy",
       "value": "Confidential"
-    },
-    {
-      "label": "Focus",
-      "value": "Practical resolution"
     }
   ],
   "services": [
     {
-      "title": "Corporate and Business Counsel",
-      "description": "Entity setup, operational agreements, governance support, compliance review, and ongoing legal guidance for growing businesses."
+      "title": "Property and Civil Disputes",
+      "description": "Land ownership review, partition questions, transaction risk, legal notices, settlement planning, and dispute documentation."
     },
     {
-      "title": "Civil and Property Matters",
-      "description": "Structured advice for disputes, ownership questions, transactions, documentation review, and settlement strategy."
+      "title": "Business and Company Matters",
+      "description": "Company setup, founder agreements, operational contracts, compliance support, board documentation, and commercial risk review."
     },
     {
-      "title": "Family and Personal Legal Support",
-      "description": "Discreet legal help for family documentation, succession planning, affidavits, petitions, and sensitive personal matters."
+      "title": "Family and Personal Documentation",
+      "description": "Succession planning, family petitions, affidavits, declarations, relationship documents, and sensitive personal legal support."
     },
     {
-      "title": "Contracts and Documentation",
-      "description": "Drafting, review, negotiation support, and risk checks for contracts, notices, letters, deeds, and formal filings."
+      "title": "Contracts, Notices, and Filings",
+      "description": "Drafting, review, negotiation support, legal notices, deeds, letters, petitions, and formal filing preparation."
     }
   ],
   "proof": [
-    "Every matter begins with facts, documents, risk, and a practical route forward.",
-    "Clients receive plain-language advice before formal filings or negotiations begin.",
-    "The work is handled with confidentiality, preparation, and respect for timelines."
+    "Plain-language advice before filings, notices, or negotiations begin.",
+    "Document-first review so the facts, risks, and deadlines are clear.",
+    "Confidential handling for families, founders, property owners, and institutions."
   ],
   "process": [
-    "Initial consultation to understand the matter, parties, documents, and desired outcome.",
-    "Legal review with a clear assessment of risks, options, timelines, and likely next steps.",
-    "Execution through documentation, negotiation, filing support, or representation as required."
-  ]
+    "Share the issue and send any available documents through phone, WhatsApp, email, or appointment request.",
+    "Receive a clear risk review covering parties, facts, documents, timelines, options, and likely next steps.",
+    "Move forward with drafting, notice, negotiation, filing support, or representation when required."
+  ],
+  "sales": {
+    "contactMethods": [
+      {
+        "label": "Call",
+        "value": "+977-9800000000",
+        "href": "tel:+9779800000000"
+      },
+      {
+        "label": "WhatsApp",
+        "value": "Send documents or ask for a consultation",
+        "href": "https://wa.me/9779800000000"
+      },
+      {
+        "label": "Email",
+        "value": "contact@sablegalservice.neup.site",
+        "href": "mailto:contact@sablegalservice.neup.site"
+      }
+    ],
+    "credentials": [
+      {
+        "label": "Advocate",
+        "detail": "Sample advocate name"
+      },
+      {
+        "label": "Registration",
+        "detail": "Sample Nepal Bar registration number"
+      },
+      {
+        "label": "Office",
+        "detail": "Sample office address, Kathmandu, Nepal"
+      }
+    ],
+    "documents": [
+      "Citizenship or company registration copy",
+      "Existing agreements, deeds, notices, or filings",
+      "Timeline of events and names of involved parties",
+      "Any court, ward, municipality, bank, or company letters"
+    ],
+    "faqs": [
+      {
+        "question": "Is the first consultation free or paid?",
+        "answer": "Sample answer: consultation fee and duration will be confirmed before the appointment."
+      },
+      {
+        "question": "Can I consult remotely?",
+        "answer": "Yes. Phone, WhatsApp, and email consultations are available for document review and initial legal direction."
+      },
+      {
+        "question": "Will my matter stay confidential?",
+        "answer": "Yes. Shared facts, documents, and strategy are handled as confidential legal information."
+      },
+      {
+        "question": "What happens after I contact SAB?",
+        "answer": "You receive a document checklist, consultation time, risk review, and clear next-step recommendation."
+      }
+    ],
+    "serviceDetails": [
+      {
+        "title": "For urgent disputes",
+        "description": "Get immediate guidance on notices, deadlines, negotiation risk, and what documents to preserve before taking action."
+      },
+      {
+        "title": "For businesses and founders",
+        "description": "Review agreements, responsibilities, compliance duties, and dispute exposure before signing or scaling operations."
+      },
+      {
+        "title": "For property owners and families",
+        "description": "Clarify ownership, inheritance, documentation, and settlement options before a small uncertainty becomes a dispute."
+      }
+    ],
+    "testimonials": [
+      {
+        "name": "Sample Name",
+        "role": "Sample client type",
+        "quote": "Sample review: SAB explained the issue clearly, reviewed the documents carefully, and gave us practical next steps."
+      },
+      {
+        "name": "Sample Name",
+        "role": "Sample business owner",
+        "quote": "Sample review: The contract review helped us understand the risks before signing."
+      },
+      {
+        "name": "Sample Name",
+        "role": "Sample family matter",
+        "quote": "Sample review: The consultation was private, calm, and easy to understand."
+      }
+    ],
+    "trustLogos": [
+      "Sample logo",
+      "Sample association",
+      "Sample partner"
+    ]
+  }
 }
