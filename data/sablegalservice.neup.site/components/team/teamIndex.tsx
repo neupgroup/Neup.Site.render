@@ -9,22 +9,24 @@ type TeamIndexProps = {
 export default function TeamIndex({ team, theme }: TeamIndexProps) {
   return (
     <main
-      className="min-h-screen bg-[#07171a] px-5 py-8 text-[#f8f1e4] sm:px-8"
+      className="min-h-screen bg-[#07171a] px-5 pb-8 pt-28 text-[#f8f1e4] sm:px-8 sm:pt-32"
       style={{
         backgroundColor: theme.background,
         color: theme.foreground,
       }}
     >
-      <section className="mx-auto max-w-7xl">
-        <nav className="mb-12 flex items-center justify-between text-sm">
+      <nav className="fixed inset-x-0 top-0 z-50 border-b border-[#07171a]/10 bg-[rgba(255,255,255,0.94)] text-[#07171a] shadow-[0_10px_30px_rgba(7,23,26,0.08)] backdrop-blur">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 text-sm sm:px-8">
           <Link href="/" className="font-serif text-lg hover:text-[#c8a968]">
             SAB Legal Service
           </Link>
-          <Link href="/blog" className="text-[#b8c2bc] hover:text-[#c8a968]">
+          <Link href="/blog" className="text-[#425254] hover:text-[#c8a968]">
             Blog
           </Link>
-        </nav>
+        </div>
+      </nav>
 
+      <section className="mx-auto max-w-7xl">
         <header className="grid gap-8 border-b border-[#c8a968]/25 pb-12 lg:grid-cols-[1fr_24rem]">
           <div>
             <p className="text-sm font-semibold uppercase text-[#c8a968]">

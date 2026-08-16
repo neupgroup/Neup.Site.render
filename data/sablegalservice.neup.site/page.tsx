@@ -39,37 +39,39 @@ async function LandingPage() {
         color: page.theme.foreground,
       }}
     >
-      <section className="relative overflow-hidden border-b border-[#c8a968]/25">
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,23,26,0.98),rgba(7,23,26,0.86),rgba(24,46,49,0.68)),url('/assets/logo.png')] bg-[length:auto,560px] bg-[position:center,calc(50%+22rem)_center] bg-no-repeat opacity-95" />
-        <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,rgba(248,241,228,0.04)_0,rgba(248,241,228,0.04)_1px,transparent_1px,transparent_92px)]" />
+      <section className="relative overflow-hidden border-b border-[#c8a968]/25 bg-white text-[#07171a]">
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.98),rgba(255,255,255,0.9),rgba(248,241,228,0.82)),url('/assets/logo.png')] bg-[length:auto,560px] bg-[position:center,calc(50%+22rem)_center] bg-no-repeat opacity-95" />
+        <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,rgba(7,23,26,0.04)_0,rgba(7,23,26,0.04)_1px,transparent_1px,transparent_92px)]" />
 
-        <div className="relative mx-auto flex min-h-[92vh] max-w-7xl flex-col px-5 py-5 sm:px-8 lg:px-10">
-          <header className="flex flex-col gap-5 border-b border-[#f8f1e4]/15 pb-5 lg:flex-row lg:items-center lg:justify-between">
-            <Link href="/" className="flex items-center gap-3">
-              <span className="grid h-12 w-12 place-items-center border border-[#c8a968]/45 bg-[#f8f1e4] p-1">
-                <img
-                  src="/favicon.ico"
-                  alt="SAB Legal Service logo"
-                  className="h-full w-full object-contain"
-                />
-              </span>
-              <span>
-                <span className="block font-serif text-xl leading-none">
-                  SAB
+        <div className="relative mx-auto flex min-h-[92vh] max-w-7xl flex-col px-5 pb-5 pt-28 sm:px-8 sm:pt-32 lg:px-10">
+          <header className="fixed inset-x-0 top-0 z-50 border-b border-[#07171a]/10 bg-[rgba(255,255,255,0.94)] text-[#07171a] shadow-[0_10px_30px_rgba(7,23,26,0.08)] backdrop-blur">
+            <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-5 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-10">
+              <Link href="/" className="flex items-center gap-3">
+                <span className="grid h-12 w-12 place-items-center border border-[#c8a968]/45 bg-[#f8f1e4] p-1">
+                  <img
+                    src="/favicon.ico"
+                    alt="SAB Legal Service logo"
+                    className="h-full w-full object-contain"
+                  />
                 </span>
-                <span className="block text-xs font-semibold uppercase text-[#c8a968]">
-                  Legal Service
+                <span>
+                  <span className="block font-serif text-xl leading-none">
+                    SAB
+                  </span>
+                  <span className="block text-xs font-semibold uppercase text-[#c8a968]">
+                    Legal Service
+                  </span>
                 </span>
-              </span>
-            </Link>
+              </Link>
 
-            <nav className="flex flex-wrap items-center gap-x-5 gap-y-3 text-xs font-semibold uppercase text-[#f5ead5]/80">
-              {page.navigation.map((item) => (
-                <a key={item.href} href={item.href} className="hover:text-[#c8a968]">
-                  {item.label}
-                </a>
-              ))}
-            </nav>
+              <nav className="flex flex-wrap items-center gap-x-5 gap-y-3 text-xs font-semibold uppercase text-[#425254]">
+                {page.navigation.map((item) => (
+                  <a key={item.href} href={item.href} className="hover:text-[#c8a968]">
+                    {item.label}
+                  </a>
+                ))}
+              </nav>
+            </div>
           </header>
 
           <div className="grid flex-1 items-center gap-10 py-14 lg:grid-cols-[minmax(0,1fr)_24rem] lg:py-20">
@@ -77,17 +79,17 @@ async function LandingPage() {
               <p className="text-sm font-semibold uppercase text-[#c8a968]">
                 {page.eyebrow}
               </p>
-              <h1 className="mt-6 font-serif text-5xl leading-none text-[#fff9ed] sm:text-7xl lg:text-8xl">
+              <h1 className="mt-6 font-serif text-5xl leading-none text-[#07171a] sm:text-7xl lg:text-8xl">
                 {page.heading}
               </h1>
-              <p className="mt-7 max-w-2xl text-lg leading-8 text-[#d8ded8] sm:text-xl">
+              <p className="mt-7 max-w-2xl text-lg leading-8 text-[#425254] sm:text-xl">
                 {page.summary}
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <Button {...page.componentProps.button} />
                 <Button {...page.componentProps.secondaryButton} />
               </div>
-              <div className="mt-6 flex flex-wrap gap-4 text-sm text-[#d8ded8]">
+              <div className="mt-6 flex flex-wrap gap-4 text-sm text-[#425254]">
                 <a className="text-[#c8a968] hover:text-[#f3d58d]" href={`mailto:${page.profile.email}`}>
                   {page.profile.email}
                 </a>
@@ -97,20 +99,20 @@ async function LandingPage() {
               </div>
             </div>
 
-            <aside className="border-l border-[#c8a968]/35 bg-[#07171a]/55 p-6">
+            <aside className="border border-[#c8a968]/35 bg-[#fff9ed] p-6 shadow-[0_20px_45px_rgba(7,23,26,0.08)]">
               <p className="text-xs font-semibold uppercase text-[#c8a968]">
                 Before you decide
               </p>
-              <p className="mt-5 font-serif text-3xl leading-tight text-[#fff9ed]">
+              <p className="mt-5 font-serif text-3xl leading-tight text-[#07171a]">
                 Speak with counsel before signing, replying, filing, or ignoring a deadline.
               </p>
               <div className="mt-8 grid gap-4">
                 {page.stats.map((stat) => (
-                  <div key={stat.label} className="border-t border-[#f8f1e4]/15 pt-4">
-                    <p className="text-xs uppercase text-[#b8c2bc]">
+                  <div key={stat.label} className="border-t border-[#07171a]/10 pt-4">
+                    <p className="text-xs uppercase text-[#425254]">
                       {stat.label}
                     </p>
-                    <p className="mt-1 font-serif text-2xl text-[#f8f1e4]">
+                    <p className="mt-1 font-serif text-2xl text-[#07171a]">
                       {stat.value}
                     </p>
                   </div>
@@ -123,7 +125,7 @@ async function LandingPage() {
             {page.highlights.map((highlight) => (
               <p
                 key={highlight}
-                className="border-t border-[#c8a968]/35 pt-4 text-sm leading-6 text-[#d8ded8]"
+                className="border-t border-[#c8a968]/35 pt-4 text-sm leading-6 text-[#425254]"
               >
                 {highlight}
               </p>
