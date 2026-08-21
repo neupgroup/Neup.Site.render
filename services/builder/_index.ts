@@ -84,6 +84,14 @@ function toProjectPath(targetPath: string) {
     : targetPath;
 }
 
+function getSiteRawRoot(siteId: string) {
+  return path.join("iobox", siteId, "raw");
+}
+
+function getSiteBuildRoot(siteId: string) {
+  return path.join("iobox", siteId, "build");
+}
+
 function assertInsidePath(targetPath: string, parentPath: string, label: string) {
   const relativePath = path.relative(parentPath, targetPath);
 
@@ -351,8 +359,10 @@ export async function downloadRemoteBuildMapFiles(options: {
 }) {
   assertValidSiteId(options.siteId);
 
-  const inputRoot = resolveProjectPath(options.inputRoot ?? "input");
-  const siteInputPath = path.join(inputRoot, options.siteId);
+  const inputRoot = resolveProjectPath(
+    options.inputRoot ?? getSiteRawRoot(options.siteId),
+  );
+  const siteInputPath = inputRoot;
   const filesBaseUrl = assertAllowedRemoteUrl(
     options.filesBaseUrl,
     "filesBaseUrl",
@@ -408,6 +418,9 @@ export async function buildRemoteSiteCode(
 ): Promise<BuildRemoteSiteCodeResult> {
   assertValidSiteId(options.siteId);
 
+  const inputRoot = options.inputRoot ?? getSiteRawRoot(options.siteId);
+  const outputRoot = options.outputRoot ?? getSiteBuildRoot(options.siteId);
+
   const buildMapUrl =
     options.buildMapUrl ?? getDefaultBuildMapUrl(options.siteId);
   const filesBaseUrl =
@@ -416,7 +429,7 @@ export async function buildRemoteSiteCode(
   const { downloadedFiles, siteInputPath } = await downloadRemoteBuildMapFiles({
     buildMap,
     filesBaseUrl,
-    inputRoot: options.inputRoot,
+    inputRoot,
     siteId: options.siteId,
   });
   const buildTarget = path.join(
@@ -427,8 +440,8 @@ export async function buildRemoteSiteCode(
     bundle: options.bundle,
     esbuildOptions: options.esbuildOptions,
     inputPath: toProjectPath(buildTarget),
-    inputRoot: options.inputRoot,
-    outputRoot: options.outputRoot,
+    inputRoot,
+    outputRoot,
   });
 
   return {
