@@ -22,11 +22,13 @@ export type BuildInputCodeResult = {
 };
 
 export type RemoteBuildMapFile = {
-  filename: string;
   path: string;
+  size?: number;
+  version?: number;
 };
 
 export type DownloadedBuildMapFile = RemoteBuildMapFile & {
+  filename: string;
   fileUrl: string;
   inputPath: string;
 };
@@ -108,7 +110,10 @@ function assertValidSiteId(siteId: string) {
 
 function getAllowedRemoteOrigins() {
   return new Set(
-    (process.env.BUILDER_ALLOWED_REMOTE_ORIGINS ?? "https://neupgroup.com")
+    (
+      process.env.BUILDER_ALLOWED_REMOTE_ORIGINS ??
+      "https://neupgroup.com,http://localhost:7483"
+    )
       .split(",")
       .map((origin) => origin.trim())
       .filter(Boolean),
@@ -124,8 +129,12 @@ function assertAllowedRemoteUrl(sourceUrl: string, label: string) {
     throw new BuilderError(`${label} must be a valid URL`, 400);
   }
 
-  if (url.protocol !== "https:") {
-    throw new BuilderError(`${label} must use https`, 400);
+  if (url.protocol !== "https:" && url.protocol !== "http:") {
+    throw new BuilderError(`${label} must use http or https`, 400);
+  }
+
+  if (url.protocol === "http:" && url.hostname !== "localhost") {
+    throw new BuilderError(`${label} may only use http for localhost`, 400);
   }
 
   if (!getAllowedRemoteOrigins().has(url.origin)) {
@@ -135,36 +144,32 @@ function assertAllowedRemoteUrl(sourceUrl: string, label: string) {
   return url;
 }
 
-function normalizeRemoteDirectory(remotePath: string) {
-  if (!remotePath.startsWith("/")) {
-    throw new BuilderError("Build map file paths must start with /", 422);
+function normalizeRemoteFilePath(remotePath: string) {
+  if (remotePath.length === 0) {
+    throw new BuilderError("Build map file paths must not be empty", 422);
   }
 
   const normalizedPath = path.posix.normalize(remotePath);
 
-  if (normalizedPath === "/") {
-    return "/";
-  }
-
-  if (normalizedPath.startsWith("/../") || normalizedPath === "/..") {
-    throw new BuilderError("Build map file paths must stay inside /", 422);
+  if (
+    normalizedPath === "." ||
+    normalizedPath === ".." ||
+    normalizedPath.startsWith("../") ||
+    normalizedPath.startsWith("/") ||
+    path.posix.isAbsolute(normalizedPath)
+  ) {
+    throw new BuilderError("Build map file paths must stay inside the site root", 422);
   }
 
   return normalizedPath;
 }
 
-function normalizeRemoteFilename(filename: string) {
-  if (
-    filename.length === 0 ||
-    filename.includes("/") ||
-    filename.includes("\\") ||
-    filename === "." ||
-    filename === ".."
-  ) {
-    throw new BuilderError("Build map filenames must be plain filenames", 422);
+function normalizeBuildPath(buildPath: string) {
+  if (buildPath === "/") {
+    return "";
   }
 
-  return filename;
+  return normalizeRemoteFilePath(buildPath.startsWith("/") ? buildPath.slice(1) : buildPath);
 }
 
 function readRemoteBuildMapFile(source: unknown): RemoteBuildMapFile {
@@ -173,19 +178,26 @@ function readRemoteBuildMapFile(source: unknown): RemoteBuildMapFile {
   }
 
   const record = source as Record<string, unknown>;
-  const filename = record.filename;
   const remotePath = record.path;
+  const size = record.size;
+  const version = record.version;
 
-  if (typeof filename !== "string" || typeof remotePath !== "string") {
-    throw new BuilderError(
-      "Build map entries must include filename and path strings",
-      422,
-    );
+  if (typeof remotePath !== "string") {
+    throw new BuilderError("Build map entries must include a path string", 422);
+  }
+
+  if (size !== undefined && (!Number.isInteger(size) || size < 0)) {
+    throw new BuilderError("Build map entry size must be a non-negative integer", 422);
+  }
+
+  if (version !== undefined && !Number.isInteger(version)) {
+    throw new BuilderError("Build map entry version must be an integer", 422);
   }
 
   return {
-    filename: normalizeRemoteFilename(filename),
-    path: normalizeRemoteDirectory(remotePath),
+    path: normalizeRemoteFilePath(remotePath),
+    size: size as number | undefined,
+    version: version as number | undefined,
   };
 }
 
@@ -197,30 +209,28 @@ function readRemoteBuildMap(source: unknown) {
   return source.map(readRemoteBuildMapFile);
 }
 
-function appendPathname(baseUrl: URL, remotePath: string, filename: string) {
+function appendPathname(baseUrl: URL, remotePath: string) {
   const pathSegments = remotePath
     .split("/")
     .filter(Boolean)
     .map(encodeURIComponent);
-  const filenameSegment = encodeURIComponent(filename);
   const basePathname = baseUrl.pathname.replace(/\/$/, "");
 
   return [
     basePathname,
     ...pathSegments,
-    filenameSegment,
   ].join("/");
 }
 
 function getDefaultBuildMapUrl(siteId: string) {
-  return `https://neupgroup.com/sites/build/${encodeURIComponent(
+  return `http://localhost:7483/build/${encodeURIComponent(
     siteId,
   )}/buildmap.json`;
 }
 
 function getDefaultFilesBaseUrl(siteId: string, buildMapUrl: string) {
   const url = assertAllowedRemoteUrl(buildMapUrl, "buildMapUrl");
-  url.pathname = `/sites/builder/${encodeURIComponent(siteId)}/files`;
+  url.pathname = `/build/${encodeURIComponent(siteId)}`;
   url.search = "";
   url.hash = "";
   return url.toString();
@@ -352,16 +362,14 @@ export async function downloadRemoteBuildMapFiles(options: {
   assertInsidePath(siteInputPath, inputRoot, "siteInputPath");
 
   for (const file of options.buildMap) {
-    const inputDirectory = path.join(
-      siteInputPath,
-      file.path === "/" ? "" : file.path.slice(1),
-    );
-    const inputPath = path.join(inputDirectory, file.filename);
+    const inputPath = path.join(siteInputPath, file.path);
+    const inputDirectory = path.dirname(inputPath);
+    const filename = path.basename(file.path);
 
     assertInsidePath(inputPath, siteInputPath, "build map file");
 
     const fileUrl = new URL(filesBaseUrl);
-    fileUrl.pathname = appendPathname(filesBaseUrl, file.path, file.filename);
+    fileUrl.pathname = appendPathname(filesBaseUrl, file.path);
 
     let response: Response;
 
@@ -383,6 +391,7 @@ export async function downloadRemoteBuildMapFiles(options: {
 
     downloadedFiles.push({
       ...file,
+      filename,
       fileUrl: fileUrl.toString(),
       inputPath,
     });
@@ -412,7 +421,7 @@ export async function buildRemoteSiteCode(
   });
   const buildTarget = path.join(
     siteInputPath,
-    options.buildPath ? normalizeRemoteDirectory(options.buildPath).slice(1) : "",
+    options.buildPath ? normalizeBuildPath(options.buildPath) : "",
   );
   const buildResult = await buildInputCode({
     bundle: options.bundle,

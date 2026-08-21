@@ -78,6 +78,8 @@ export async function POST(
           fileUrl: file.fileUrl,
           inputPath: toResponsePath(file.inputPath),
           path: file.path,
+          size: file.size,
+          version: file.version,
         })),
         entryPoints: result.entryPoints.map(toResponsePath),
         outputPath: toResponsePath(result.outputPath),
