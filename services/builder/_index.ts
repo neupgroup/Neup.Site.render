@@ -1,6 +1,9 @@
+import "server-only";
+
 import { mkdir, readdir, stat, writeFile } from "node:fs/promises";
+import { createRequire } from "node:module";
 import path from "node:path";
-import { build, type BuildOptions, type BuildResult } from "esbuild";
+import type { BuildOptions, BuildResult } from "esbuild";
 
 export type BuilderInputPath = `@/input/${string}` | `input/${string}` | string;
 
@@ -71,6 +74,18 @@ const buildableExtensions = new Set([
   ".tsx",
 ]);
 
+const require = createRequire(import.meta.url);
+
+function getEsbuild() {
+  return require("esbuild") as {
+    build: (options: BuildOptions) => Promise<BuildResult>;
+  };
+}
+
+function logBuilderEvent(message: string, details: Record<string, unknown>) {
+  console.info(`[builder] ${message}`, details);
+}
+
 function resolveProjectPath(projectPath: string) {
   return path.resolve(
     process.cwd(),
@@ -120,7 +135,7 @@ function getAllowedRemoteOrigins() {
   return new Set(
     (
       process.env.BUILDER_ALLOWED_REMOTE_ORIGINS ??
-      "https://neupgroup.com,http://localhost:7483"
+      "https://neupgroup.com,http://localhost:7483,https://localhost:7483"
     )
       .split(",")
       .map((origin) => origin.trim())
@@ -194,18 +209,24 @@ function readRemoteBuildMapFile(source: unknown): RemoteBuildMapFile {
     throw new BuilderError("Build map entries must include a path string", 422);
   }
 
-  if (size !== undefined && (!Number.isInteger(size) || size < 0)) {
+  if (
+    size != null &&
+    (typeof size !== "number" || !Number.isInteger(size) || size < 0)
+  ) {
     throw new BuilderError("Build map entry size must be a non-negative integer", 422);
   }
 
-  if (version !== undefined && !Number.isInteger(version)) {
+  if (
+    version != null &&
+    (typeof version !== "number" || !Number.isInteger(version))
+  ) {
     throw new BuilderError("Build map entry version must be an integer", 422);
   }
 
   return {
     path: normalizeRemoteFilePath(remotePath),
-    size: size as number | undefined,
-    version: version as number | undefined,
+    size: typeof size === "number" ? size : undefined,
+    version: typeof version === "number" ? version : undefined,
   };
 }
 
@@ -231,14 +252,14 @@ function appendPathname(baseUrl: URL, remotePath: string) {
 }
 
 function getDefaultBuildMapUrl(siteId: string) {
-  return `http://localhost:7483/build/${encodeURIComponent(
+  return `https://neupgroup.com/sites/build/${encodeURIComponent(
     siteId,
   )}/buildmap.json`;
 }
 
 function getDefaultFilesBaseUrl(siteId: string, buildMapUrl: string) {
   const url = assertAllowedRemoteUrl(buildMapUrl, "buildMapUrl");
-  url.pathname = `/build/${encodeURIComponent(siteId)}`;
+  url.pathname = `/sites/build/${encodeURIComponent(siteId)}`;
   url.search = "";
   url.hash = "";
   return url.toString();
@@ -277,6 +298,7 @@ async function collectBuildableSourceFiles(directory: string): Promise<string[]>
 export async function buildInputCode(
   options: BuildInputCodeOptions,
 ): Promise<BuildInputCodeResult> {
+  const { build } = getEsbuild();
   const inputRoot = resolveProjectPath(options.inputRoot ?? "input");
   const outputRoot = resolveProjectPath(options.outputRoot ?? "output");
   const inputPath = resolveProjectPath(options.inputPath);
@@ -328,10 +350,21 @@ export async function fetchRemoteBuildMap(buildMapUrl: string) {
   let response: Response;
 
   try {
+    logBuilderEvent("fetch remote build map", {
+      method: "GET",
+      absoluteUrl: url.toString(),
+    });
     response = await fetch(url);
   } catch {
     throw new BuilderError("Unable to fetch build map", 502);
   }
+
+  logBuilderEvent("remote build map response", {
+    method: "GET",
+    absoluteUrl: url.toString(),
+    status: response.status,
+    statusText: response.statusText,
+  });
 
   if (!response.ok) {
     throw new BuilderError(
@@ -369,6 +402,13 @@ export async function downloadRemoteBuildMapFiles(options: {
   );
   const downloadedFiles: DownloadedBuildMapFile[] = [];
 
+  logBuilderEvent("prepare remote file downloads", {
+    siteId: options.siteId,
+    filesBaseUrl: filesBaseUrl.toString(),
+    siteInputPath,
+    buildMapCount: options.buildMap.length,
+  });
+
   assertInsidePath(siteInputPath, inputRoot, "siteInputPath");
 
   for (const file of options.buildMap) {
@@ -384,10 +424,24 @@ export async function downloadRemoteBuildMapFiles(options: {
     let response: Response;
 
     try {
+      logBuilderEvent("fetch remote file", {
+        method: "GET",
+        absoluteUrl: fileUrl.toString(),
+        remotePath: file.path,
+        localInputPath: inputPath,
+      });
       response = await fetch(fileUrl);
     } catch {
       throw new BuilderError(`Unable to fetch ${fileUrl.toString()}`, 502);
     }
+
+    logBuilderEvent("remote file response", {
+      method: "GET",
+      absoluteUrl: fileUrl.toString(),
+      remotePath: file.path,
+      status: response.status,
+      statusText: response.statusText,
+    });
 
     if (!response.ok) {
       throw new BuilderError(
@@ -425,6 +479,14 @@ export async function buildRemoteSiteCode(
     options.buildMapUrl ?? getDefaultBuildMapUrl(options.siteId);
   const filesBaseUrl =
     options.filesBaseUrl ?? getDefaultFilesBaseUrl(options.siteId, buildMapUrl);
+  logBuilderEvent("start remote site build", {
+    siteId: options.siteId,
+    buildMapUrl,
+    filesBaseUrl,
+    buildPath: options.buildPath ?? "/",
+    inputRoot,
+    outputRoot,
+  });
   const buildMap = await fetchRemoteBuildMap(buildMapUrl);
   const { downloadedFiles, siteInputPath } = await downloadRemoteBuildMapFiles({
     buildMap,
@@ -442,6 +504,15 @@ export async function buildRemoteSiteCode(
     inputPath: toProjectPath(buildTarget),
     inputRoot,
     outputRoot,
+  });
+
+  logBuilderEvent("build completed", {
+    siteId: options.siteId,
+    buildTarget,
+    siteInputPath,
+    outputPath: buildResult.outputPath,
+    downloadedFileCount: downloadedFiles.length,
+    entryPointCount: buildResult.entryPoints.length,
   });
 
   return {
